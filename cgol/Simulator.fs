@@ -8,7 +8,6 @@ open Shapes
 
 type Simulator() as this =
     inherit Game()
-    
     let graphics = new GraphicsDeviceManager(this)
     let mutable spritebatch = Unchecked.defaultof<SpriteBatch>
     let mutable state = Unchecked.defaultof<SimulationState>
@@ -24,7 +23,7 @@ type Simulator() as this =
         do spritebatch <- new SpriteBatch(this.GraphicsDevice)
         let plainTexture = new Texture2D(this.GraphicsDevice, 1, 1)
         plainTexture.SetData([|Color.White|])
-
+        // Initialize default state
         let blocks = Array2D.init 100 100 (fun x y -> {position = new Vector2(y |> float32, x |> float32); alive = false; aliveNextTurn = false})
         let blocksWithShape = blocks |> Array2D.map (fun block -> { block with alive = (setGlider block) })
         do state <- {texture = plainTexture; blocks = blocksWithShape}
@@ -37,8 +36,7 @@ type Simulator() as this =
         | true -> 
             do delay <- originalDelay
             do state <- SimulationState.update dt state 
-        | false -> do state <- state
-        ()
+        | false -> ()
   
     override this.Draw(gameTime) =
         do this.GraphicsDevice.Clear Color.Black

@@ -11,13 +11,11 @@ let boolToInt bool =
     | false -> 0
 
 let updateBlock (block: Block) (state: SimulationState) =
-    let arraySize = 99
+    let arraySize = (Array2D.length1 state.blocks)-1
     let blockAlive positionX positionY  = 
         match ((block.position.X |> int)+positionX < 0) || ((block.position.X |> int)+positionX > arraySize) || ((block.position.Y |> int)+positionY < 0) || ((block.position.Y |> int)+positionY > arraySize) with 
         | true -> 0
-        | false -> 
-            let text = Array2D.get state.blocks ((block.position.Y |> int)+positionY) ((block.position.X |> int)+positionX)
-            boolToInt (Array2D.get state.blocks ((block.position.Y |> int)+positionY) ((block.position.X |> int)+positionX)).alive
+        | false -> boolToInt (Array2D.get state.blocks ((block.position.Y |> int)+positionY) ((block.position.X |> int)+positionX)).alive
     let topLeftAlive = blockAlive -1 -1
     let topMiddleAlive = blockAlive -1 0
     let topRightAlive = blockAlive -1 1
